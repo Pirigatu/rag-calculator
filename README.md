@@ -80,4 +80,4 @@ Agradeço à comunidade do **Ragnatales** pelo apoio e sugestões!
 
 **⭐ Gostou da calculadora? Deixe uma estrela no repositório!**
 
-*Última atualização: ${new Date().toLocaleDateString('pt-BR')}*
+*Última atualização: 24/09/2025
