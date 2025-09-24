@@ -28,8 +28,15 @@ Uma calculadora inteligente para facilitar o craft de poções no servidor **Rag
 - ✅ Poção X Dourada
 - ✅ Ativador de Erva Vermelha
 - ✅ Ativador de Erva Azul
-- ✅ Poção Branca
-- ✅ Poção Vermelha
+- ✅ Semente de Planta Selvagem
+- ✅ Semente de Planta Sanguessuga
+- ✅ Esporo de Cogumelo Explosivo
+- ✅ Poção Vitata 500
+- ✅ Suco Celular Enriquecido
+- ✅ Poção Vermelha Concentrada
+- ✅ Poção Azul Concentrada
+- ✅ Poção Grande de HP
+- ✅ Poção Grande de SP
 
 ## 🚀 Como Usar
 
