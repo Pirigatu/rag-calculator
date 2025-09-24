@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Itens Ragnarok</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #2b2b52 0%, #1a1a35 100%);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      flex-direction: column;
+    }
+    .container {
+      background: #3b3b73;
+      padding: 25px 30px;
+      border: 3px solid #b0c4de;
+      border-radius: 12px;
+      width: 500px;
+      max-width: 95%;
+      text-align: center;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.4), 0 0 25px rgba(0,0,0,0.6);
+      margin-bottom: 20px;
+    }
+    h2 {
+      background: #1f1f3d;
+      border: 2px solid #b0c4de;
+      border-radius: 6px;
+      padding: 10px;
+      margin: -10px 0 20px;
+      font-size: 18px;
+      text-shadow: 1px 1px 2px black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .abas {
+      display: flex;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #b0c4de;
+    }
+    .aba-btn {
+      flex: 1;
+      background: #2a2a5a;
+      color: #b0c4de;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .aba-btn:hover {
+      background: #35356a;
+    }
+    .aba-btn.active {
+      background: #4caf50;
+      color: white;
+    }
+    .conteudo-aba {
+      display: none;
+    }
+    .conteudo-aba.active {
+      display: block;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      text-align: left;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px;
+      border: 2px solid #b0c4de;
+      border-radius: 6px;
+      background: #24244d;
+      color: #fff;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #ffd700;
+      box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+    button {
+      background: #4caf50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 10px 5px;
+      box-shadow: 0 0 5px #000;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    #resultado, #resultadoItens, #erro {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: left;
+      background: #1f1f3d;
+      padding: 15px;
+      border-radius: 6px;
+      border: 2px solid #b0c4de;
+    }
+    #resultado img, #resultadoItens img {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+      margin-right: 8px;
+      border: 1px solid #b0c4de;
+      border-radius: 4px;
+      background: #24244d;
+      padding: 2px;
+    }
+    #imagem, #imagemItens {
+      margin: 15px 0;
+      display: flex;
+      justify-content: center;
+    }
+    #imagem img, #imagemItens img {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #b0c4de;
+      border-radius: 8px;
+      background: #24244d;
+      padding: 5px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.6);
+    }
+    .ingrediente-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+    }
+    .ingrediente-info {
+      flex: 1;
+      text-align: left;
+    }
+    .ingrediente-input {
+      width: 80px;
+      margin-left: 10px;
+    }
+    .info-text {
+      font-size: 0.9em;
+      color: #b0c4de;
+      margin-top: 5px;
+    }
+    .erro {
+      color: #ff6b6b;
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid #ff6b6b;
+    }
+    .sucesso {
+      color: #4caf50;
+      background: rgba(76, 175, 80, 0.1);
+      border: 1px solid #4caf50;
+    }
+    .dourado-info {
+      color: #ffd700;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+    .dourado-icon {
+      color: #ffd700;
+      margin-right: 5px;
+    }
+    .checkbox-contextual {
+      display: flex;
+      align-items: center;
+      margin: 5px 0 10px 30px;
+      padding: 5px 8px;
+      background: rgba(255, 215, 0, 0.05);
+      border-radius: 4px;
+      border: 1px dashed #ffd700;
+    }
+    .checkbox-contextual input {
+      width: auto;
+      margin: 0 8px 0 0;
+    }
+    .checkbox-contextual label {
+      margin: 0;
+      color: #ffd700;
+      font-size: 0.9em;
+    }
+    .info-dourados {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid #ffd700;
+      border-radius: 6px;
+      padding: 10px;
+      margin: 15px 0;
+      text-align: left;
+    }
+    .info-dourados h4 {
+      color: #ffd700;
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .info-dourados ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .info-dourados li {
+      margin-bottom: 5px;
+    }
+    .detalhes-itens {
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      border-left: 3px solid #4caf50;
+    }
+    .detalhes-itens h4 {
+      margin: 0 0 10px 0;
+      color: #4caf50;
+    }
+    .item-usado {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 5px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 4px;
+    }
+    .item-usado img {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
+    .item-dourado {
+      color: #ffd700;
+      font-style: italic;
+    }
+    .item-obrigatorio {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 8px;
+      background: rgba(76, 175, 80, 0.1);
+      border-radius: 6px;
+      border-left: 3px solid #4caf50;
+    }
+    .item-obrigatorio img {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+    .obrigatorio-info {
+      color: #4caf50;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+    .rodape {
+      text-align: center;
+      padding: 15px;
+      background: rgba(31, 31, 61, 0.8);
+      border-radius: 8px;
+      border: 1px solid #b0c4de;
+      width: 500px;
+      max-width: 95%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .rodape p {
+      margin: 5px 0;
+      font-size: 0.9em;
+      color: #b0c4de;
+    }
+    .rodape .destaque {
+      color: #ffd700;
+      font-weight: bold;
+    }
+    .discord-icon {
+      display: inline-block;
+      background: #5865F2;
+      color: white;
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin: 0 3px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>⚔️ Calculadora Ragnarok ⚗️</h2>
+
+    <div class="abas">
+      <button class="aba-btn active" onclick="mostrarAba('quantidade')">📦 Pela Quantidade</button>
+      <button class="aba-btn" onclick="mostrarAba('itens')">🧪 Pelos Itens</button>
+    </div>
+
+    <!-- Aba 1 -->
+    <div id="abaQuantidade" class="conteudo-aba active">
+      <label><b>Escolha a Receita:</b></label>
+      <select id="receita" onchange="mostrarImagem()"></select>
+      <div id="imagem"></div>
+
+      <div class="info-dourados">
+        <h4><span class="dourado-icon">★</span> Itens Dourados Infinitos</h4>
+        <p>No servidor Ragnatales, você pode usar as versões douradas dos seguintes itens:</p>
+        <ul>
+          <li><b>Tubo de Ensaio Dourado</b> - Substitui o Tubo de Ensaio (infinito)</li>
+          <li><b>Garrafa Vazia Dourada</b> - Substitui a Garrafa Vazia (infinito)</li>
+          <li><b>Garrafa de Poção Dourada</b> - Substitui a Garrafa de Poção (infinito)</li>
+        </ul>
+        <p>Na aba "Pelos Itens" você pode marcar quais itens dourados possui.</p>
+      </div>
+
+      <label><b>Quantidade desejada (múltiplos de 12):</b></label>
+      <input type="number" id="qtd" value="12" step="12" min="12" onchange="calcular()">
+      <div class="info-text">A produção é feita em lotes de 12 unidades</div>
+
+      <button onclick="calcular()">Calcular Ingredientes</button>
+      <div id="erro" style="display:none;"></div>
+      <div id="resultado"></div>
+    </div>
+
+    <!-- Aba 2 -->
+    <div id="abaItens" class="conteudo-aba">
+      <label><b>Escolha a Receita:</b></label>
+      <select id="receitaItens" onchange="mostrarImagemItens()"></select>
+      <div id="imagemItens"></div>
+
+      <div class="info-dourados">
+        <h4><span class="dourado-icon">ℹ️</span> Informações Importantes</h4>
+        <p>Os seguintes itens são <b>obrigatórios</b> e serão considerados automaticamente:</p>
+        <ul>
+          <li>Livro de Farmacologia</li>
+          <li>Livro de Genética Vegetal</li>
+          <li>Como Aumentar sua Força</li>
+          <li>Como Aumentar sua Energia</li>
+        </ul>
+        <p>Digite apenas a quantidade dos demais ingredientes que você possui:</p>
+      </div>
+
+      <div id="inputsIngredientes"></div>
+
+      <button onclick="calcularPorItens()">Calcular Poções Possíveis</button>
+      <div id="resultadoItens"></div>
+    </div>
+  </div>
+
+  <div class="rodape">
+    <p>Criado de player para player por <span class="destaque">Pirigatu</span></p>
+    <p>Contato: <span class="discord-icon">Discord</span> <span class="destaque">Pirigatu</span></p>
+    <p>Calculadora para o servidor Ragnatales</p>
+  </div>
+
+  <script>
+    const receitas = {
+      pocaoxDourada: {
+        nome: "Poção X Dourada",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/pocao_x_dourada.png",
+        ingredientes: [
+          { nome: "Livro de Farmacologia", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_farmacologia.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Tubo de Ensaio", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/tubo_ensaio.png", dourado: true },
+          { nome: "Fruto de Ygg", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/fruto_ygg.png" },
+          { nome: "Ouro", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/ouro.png" }
+        ]
+      },
+      ativadorVermelho: {
+        nome: "Ativador de Erva Vermelha",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/ativador_erva_vermelha.png",
+        ingredientes: [
+          { nome: "Livro de Farmacologia", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_farmacologia.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Tubo de Ensaio", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/tubo_ensaio.png", dourado: true },
+          { nome: "Erva Vermelha", qtd: 45, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/erva_vermelha.png" },
+          { nome: "Semente de Yggdrasil", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/semente_ygg.png" }
+        ]
+      },
+      ativadorAzul: {
+        nome: "Ativador de Erva Azul",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/ativador_erva_azul.png",
+        ingredientes: [
+          { nome: "Livro de Genética Vegetal", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_genetica_vegetal.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Tubo de Ensaio", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/tubo_ensaio.png", dourado: true },
+          { nome: "Erva Azul", qtd: 45, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/erva_azul.png" },
+          { nome: "Semente de Yggdrasil", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/semente_ygg.png" }
+        ]
+      },
+      sementeSelvagem: {
+		nome: "Semente de Planta Selvagem",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/semente_planta_selvagem.png",
+        ingredientes: [
+          { nome: "Livro de Genética Vegetal", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_genetica_vegetal.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Fruta Espinhosa", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/fruta_espinhosa.png" }
+        ]
+      },
+      sementeSanguessuga: {
+		nome: "Semente de Planta Sanguessuga",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/semente_planta_sanguessuga.png",
+        ingredientes: [
+          { nome: "Livro de Genética Vegetal", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_genetica_vegetal.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Raiz de Planta Carnívora", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/raiz_planta_carnivora.png" }
+        ]
+      },
+	  esporoExplosivo: {
+		nome: "Esporo de Cogumelo Explosivo",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/esporo_cogumelo_explosivo.png",
+        ingredientes: [
+          { nome: "Livro de Genética Vegetal", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_genetica_vegetal.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Esporo", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/esporo.png" },
+          { nome: "Esporo Venenoso", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/esporo_venenoso.png" },
+          { nome: "Mistura de Pólvora", qtd: 2, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/mistura_polvora.png" }
+        ]
+      },
+	  pocaoVitata: {
+		nome: "Poção Vitata 500",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/pocao_vitata_500.png",
+        ingredientes: [
+          { nome: "Livro de Farmacologia", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_farmacologia.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Tubo de Ensaio", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/tubo_ensaio.png", dourado: true },
+          { nome: "Uva", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/uva.png" },
+          { nome: "Mel", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/mel.png" },
+          { nome: "Erva Azul", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/erva_azul.png" }
+        ]
+      },
+	  sucoCelular: {
+		nome: "Suco Celular Enriquecido",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/suco_celular.png",
+        ingredientes: [
+          { nome: "Livro de Farmacologia", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_farmacologia.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Tubo de Ensaio", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/tubo_ensaio.png", dourado: true },
+          { nome: "Poção Concentração", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/pocao_concentracao.png" },
+          { nome: "Poção Despertar", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/pocao_despertar.png" },
+          { nome: "Molho Picante", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/molho_picante.png" }
+        ]
+      },
+	  pocaoVermelhaConcentrada: {
+		nome: "Poção Vermelha Concentrada",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/pocao_concentrada_vermelha.png",
+        ingredientes: [
+          { nome: "Livro de Farmacologia", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_farmacologia.png", naoConsumivel: true, obrigatorio:true },
+          { nome: "Garrafa de Poção", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/garrafa_pocao.png", dourado: true },
+          { nome: "Garrafa Vazia", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/garrafa_vazia.png",dourado: true },
+          { nome: "Xarope Vermelho", qtd: 15, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/xarope_vermelho.png" }
+        ]
+      },
+	  pocaoAzulConcentrada: {
+		nome: "Poção Azul Concentrada",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/pocao_concentrada_azul.png",
+        ingredientes: [
+          { nome: "Livro de Farmacologia", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/livro_farmacologia.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Garrafa de Poção", qtd: 5, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/garrafa_pocao.png", dourado: true },
+          { nome: "Garrafa Vazia", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/garrafa_vazia.png", dourado: true },
+          { nome: "Xarope Azul", qtd: 15, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/xarope_azul.png" }
+        ]
+      },
+	  pocaoGrandeHp: {
+		nome: "Poção Grande de HP",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/pocao_grande_hp.png",
+        ingredientes: [
+          { nome: "Como aumentar sua Força", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/como_aumentar_forca.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Garrafa Vazia", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/garrafa_vazia.png", dourado: true },
+          { nome: "Erva Branca", qtd: 15, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/erva_branca.png" },
+          { nome: "Mastela", qtd: 3, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/mastela.png" },
+          { nome: "Água Benta", qtd: 15, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/agua_benta.png" },
+          { nome: "Molho Picante", qtd: 15, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/molho_picante.png" }
+        ]
+      },
+      pocaoGrandeSp: {
+		nome: "Poção Grande de SP",
+        por12: 12,
+        imagem: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/pocao_grande_sp.png",
+        ingredientes: [
+          { nome: "Como aumentar sua Energia", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/como_aumentar_energia.png", naoConsumivel: true, obrigatorio: true },
+          { nome: "Garrafa Vazia", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/garrafa_vazia.png", dourado: true },
+          { nome: "Geleia Real", qtd: 10, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/geleia_real.png" },
+          { nome: "Erva Azul", qtd: 15, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/erva_azul.png" },
+          { nome: "Molho Doce", qtd: 1, img: "https://raw.githubusercontent.com/pirigatu/rag-calculator-sprites/main/images/molho_doce.png" }
+        ]
+      }
+    };
+
+    // Preenche selects
+    const selectReceita = document.getElementById("receita");
+    const selectReceitaItens = document.getElementById("receitaItens");
+    Object.keys(receitas).forEach(key => {
+      const option1 = document.createElement("option");
+      option1.value = key;
+      option1.textContent = receitas[key].nome;
+      selectReceita.appendChild(option1);
+
+      const option2 = document.createElement("option");
+      option2.value = key;
+      option2.textContent = receitas[key].nome;
+      selectReceitaItens.appendChild(option2);
+    });
+
+    function mostrarAba(aba) {
+      // Atualiza botões
+      document.querySelectorAll('.aba-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector(`.aba-btn[onclick="mostrarAba('${aba}')"]`).classList.add('active');
+      
+      // Atualiza conteúdo
+      document.querySelectorAll('.conteudo-aba').forEach(conteudo => {
+        conteudo.classList.remove('active');
+      });
+      document.getElementById(`aba${aba.charAt(0).toUpperCase() + aba.slice(1)}`).classList.add('active');
+    }
+
+    function mostrarImagem() {
+      const receita = receitas[document.getElementById("receita").value];
+      document.getElementById("imagem").innerHTML = `<img src="${receita.imagem}" alt="${receita.nome}">`;
+      calcular();
+    }
+
+    function calcular() {
+      const receita = receitas[document.getElementById("receita").value];
+      const qtdDesejada = parseInt(document.getElementById("qtd").value) || 0;
+      const erroDiv = document.getElementById("erro");
+
+      if (qtdDesejada % 12 !== 0) {
+        erroDiv.style.display = "block";
+        erroDiv.className = "erro";
+        erroDiv.innerHTML = "❌ Só é possível criar em múltiplos de 12! (12, 24, 36...)";
+        document.getElementById("resultado").innerHTML = "";
+        return;
+      } else {
+        erroDiv.style.display = "none";
+      }
+
+      const numLotes = qtdDesejada / receita.por12;
+      let resultadoHTML = `<h3>Ingredientes para ${qtdDesejada} unidades (${numLotes} lotes):</h3>`;
+      
+      receita.ingredientes.forEach(ing => {
+        let total;
+        let douradoInfo = "";
+        
+        if (ing.naoConsumivel) {
+          // Itens não consumíveis são necessários apenas uma vez por craft
+          total = 1;
+        } else {
+          // Itens normais
+          total = Math.ceil(numLotes * ing.qtd);
+          
+          // Adiciona informação sobre versão dourada
+          if (ing.dourado) {
+            douradoInfo = `<span class="dourado-info"><span class="dourado-icon">★</span> Pode ser substituído por versão dourada</span>`;
+          }
+        }
+        
+        resultadoHTML += `
+          <div class="ingrediente-item">
+            <img src="${ing.img}" alt="${ing.nome}">
+            <div class="ingrediente-info">
+              <b>${total}</b> ${ing.nome}
+              ${ing.naoConsumivel ? '<span class="info-text">(não consumível)</span>' : ''}
+              ${douradoInfo}
+            </div>
+          </div>`;
+      });
+      
+      document.getElementById("resultado").innerHTML = resultadoHTML;
+    }
+
+    // Helper: cria um ID seguro a partir do nome
+    function idify(name) {
+      return 'item_' + String(name).replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+    }
+
+    function mostrarImagemItens() {
+      const receita = receitas[document.getElementById("receitaItens").value];
+      document.getElementById("imagemItens").innerHTML = `<img src="${receita.imagem}" alt="${receita.nome}">`;
+
+      let htmlInputs = "";
+      
+      // Primeiro mostra os itens obrigatórios (apenas informação)
+      const itensObrigatorios = receita.ingredientes.filter(ing => ing.obrigatorio);
+      if (itensObrigatorios.length > 0) {
+        htmlInputs += `<p><b>Itens obrigatórios (considerados automaticamente):</b></p>`;
+        itensObrigatorios.forEach(ing => {
+          htmlInputs += `
+            <div class="item-obrigatorio">
+              <img src="${ing.img}" alt="${ing.nome}">
+              <div class="ingrediente-info">
+                ${ing.nome}
+                <div class="obrigatorio-info">✓ Item obrigatório (não consumível)</div>
+              </div>
+            </div>`;
+        });
+      }
+      
+      // Depois mostra os demais ingredientes (com input)
+      const outrosIngredientes = receita.ingredientes.filter(ing => !ing.obrigatorio);
+      if (outrosIngredientes.length > 0) {
+        htmlInputs += `<p style="margin-top: 15px;"><b>Digite a quantidade dos demais ingredientes:</b></p>`;
+        outrosIngredientes.forEach(ing => {
+          const id = idify(ing.nome);
+          const checkboxId = `dourado_${id}`;
+          
+          htmlInputs += `
+            <div class="ingrediente-item">
+              <img src="${ing.img}" alt="${ing.nome}">
+              <div class="ingrediente-info">
+                ${ing.nome}:
+              </div>
+              <input type="number" id="${id}" min="0" value="0" class="ingrediente-input" onchange="calcularPorItens()">
+            </div>`;
+            
+          // Adiciona checkbox contextual apenas para itens que podem ser dourados
+          if (ing.dourado) {
+            htmlInputs += `
+              <div class="checkbox-contextual">
+                <input type="checkbox" id="${checkboxId}" onchange="calcularPorItens()">
+                <label for="${checkboxId}">Versão Dourada (Infinito)</label>
+              </div>`;
+          }
+        });
+      }
+      
+      document.getElementById("inputsIngredientes").innerHTML = htmlInputs;
+      calcularPorItens();
+    }
+
+    function calcularPorItens() {
+      const receita = receitas[document.getElementById("receitaItens").value];
+      let maxLotes = Infinity;
+      let ingredientesFaltantes = [];
+      let itensUsados = [];
+
+      // Primeiro, calculamos o máximo de lotes possíveis
+      receita.ingredientes.forEach(ing => {
+        const id = idify(ing.nome);
+        const checkboxId = `dourado_${id}`;
+        
+        if (ing.obrigatorio) {
+          // Itens obrigatórios não limitam a produção (são considerados disponíveis)
+          // Mas verificamos se o usuário tem pelo menos 1
+          let qtdPossuo = parseInt(document.getElementById(id)?.value, 10) || 0;
+          if (qtdPossuo < 1 && document.getElementById(id)) {
+            ingredientesFaltantes.push(ing.nome);
+            if (maxLotes > 0) maxLotes = 0;
+          }
+        } else {
+          // Para os demais itens, verifica a quantidade informada pelo usuário
+          let qtdPossuo = parseInt(document.getElementById(id).value, 10) || 0;
+          const temDourado = ing.dourado && document.getElementById(checkboxId)?.checked;
+          
+          if (!temDourado) {
+            // Para itens consumíveis normais, calcula quantos lotes são possíveis
+            const lotesComEsteItem = Math.floor(qtdPossuo / ing.qtd);
+            if (lotesComEsteItem < maxLotes) {
+              maxLotes = lotesComEsteItem;
+            }
+          }
+          // Itens dourados não limitam a produção (são infinitos)
+        }
+      });
+
+      if (!isFinite(maxLotes) || maxLotes === Infinity) {
+        maxLotes = 0;
+      }
+
+      const totalUnidades = maxLotes * receita.por12;
+      let resultadoHTML = "";
+      
+      if (maxLotes === 0) {
+        if (ingredientesFaltantes.length > 0) {
+          resultadoHTML = `<div class="erro">❌ Você não pode produzir nenhuma poção. Faltam: ${ingredientesFaltantes.join(', ')}</div>`;
+        } else {
+          resultadoHTML = `<div class="erro">❌ Você não possui ingredientes suficientes para produzir nenhuma poção.</div>`;
+        }
+      } else {
+        resultadoHTML = `<div class="sucesso">✅ Você consegue produzir até <b>${totalUnidades}</b> unidades (${maxLotes} lotes de ${receita.por12}).</div>`;
+        
+        // Agora calculamos os itens que serão realmente usados
+        receita.ingredientes.forEach(ing => {
+          const id = idify(ing.nome);
+          const checkboxId = `dourado_${id}`;
+          const temDourado = ing.dourado && document.getElementById(checkboxId)?.checked;
+          
+          if (ing.obrigatorio) {
+            // Itens obrigatórios são usados mas não consumidos
+            itensUsados.push({
+              nome: ing.nome,
+              img: ing.img,
+              quantidade: 1,
+              obrigatorio: true,
+              naoConsumivel: true
+            });
+          } else if (temDourado) {
+            // Itens dourados são usados mas não consumidos (infinitos)
+            itensUsados.push({
+              nome: ing.nome,
+              img: ing.img,
+              quantidade: maxLotes * ing.qtd,
+              dourado: true,
+              texto: `Usado (versão dourada - ${maxLotes * ing.qtd} unidades infinitas)`
+            });
+          } else {
+            // Itens normais são consumidos
+            itensUsados.push({
+              nome: ing.nome,
+              img: ing.img,
+              quantidade: maxLotes * ing.qtd,
+              dourado: false
+            });
+          }
+        });
+        
+        // Adiciona detalhes dos itens usados
+        resultadoHTML += `
+          <div class="detalhes-itens">
+            <h4>📋 Itens que serão usados:</h4>
+            ${itensUsados.map(item => {
+              if (item.obrigatorio) {
+                return `
+                  <div class="item-usado">
+                    <img src="${item.img}" alt="${item.nome}">
+                    <span><b>${item.quantidade}</b> ${item.nome} <span class="obrigatorio-info">(obrigatório, não consumível)</span></span>
+                  </div>`;
+              } else if (item.dourado) {
+                return `
+                  <div class="item-usado">
+                    <img src="${item.img}" alt="${item.nome}">
+                    <span class="item-dourado">${item.texto}</span>
+                  </div>`;
+              } else {
+                return `
+                  <div class="item-usado">
+                    <img src="${item.img}" alt="${item.nome}">
+                    <span><b>${item.quantidade}</b> ${item.nome}</span>
+                  </div>`;
+              }
+            }).join('')}
+          </div>`;
+      }
+      
+      document.getElementById("resultadoItens").innerHTML = resultadoHTML;
+    }
+
+    // Inicialização
+    mostrarImagem();
+    mostrarImagemItens();
+  </script>
+</body>
+</html>
